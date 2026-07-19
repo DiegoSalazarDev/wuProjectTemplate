@@ -1,10 +1,21 @@
 {
-  "name": "Wii U Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/base:debian",
-  "postCreateCommand": "sudo apt-get update && sudo apt-get install -y git make curl && curl -LO https://github.com/devkitPro/pacman/releases/latest/download/devkitpro-pacman.deb && sudo dpkg -i devkitpro-pacman.deb && sudo dkp-pacman -S --noconfirm devkitPPC wut-examples",
-  "customizations": {
-    "vscode": {
-      "extensions": ["ms-vscode.cpptools"]
-    }
-  }
+    "name": "WiiU Development Environment",
+    "build": {
+        "dockerfile": "Dockerfile"
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "C_Cpp.default.compilerPath": "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-gcc",
+                "C_Cpp.default.includePath": [
+                    "${workspaceFolder}/**",
+                    "/opt/devkitpro/wut/include/**"
+                ]
+            },
+            "extensions": [
+                "ms-vscode.cpptools"
+            ]
+        }
+    },
+    "remoteUser": "vscode"
 }
