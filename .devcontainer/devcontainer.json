@@ -1,21 +1,19 @@
 {
-    "name": "WiiU Development Environment",
-    "build": {
-        "dockerfile": "Dockerfile"
-    },
+    "name": "WiiU Prebuilt Devkit",
+    "image": "docker.io/webhdx/devkitppc:latest",
     "customizations": {
         "vscode": {
             "settings": {
                 "C_Cpp.default.compilerPath": "/opt/devkitpro/devkitPPC/bin/powerpc-eabi-gcc",
                 "C_Cpp.default.includePath": [
                     "${workspaceFolder}/**",
-                    "/opt/devkitpro/wut/include/**"
+                    "/opt/devkitpro/wut/include/**",
+                    "/opt/devkitpro/portlibs/wiiu/include/**"
                 ]
             },
             "extensions": [
                 "ms-vscode.cpptools"
             ]
         }
-    },
-    "remoteUser": "vscode"
+    }
 }
