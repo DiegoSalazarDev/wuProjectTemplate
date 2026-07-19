@@ -1,29 +1,23 @@
 FROM mcr.microsoft.com/devcontainers/base:ubuntu-22.04
 
-# 1. Instalar dependencias necesarias para manejar repositorios
+# 1. Instalar dependencias base y herramientas de firma
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     gnupg \
     ca-certificates \
-    sudo
+    apt-transport-https
 
-# 2. Instalar el gestor de paquetes de devkitPro
-RUN curl -LO https://github.com/devkitPro/pacman/releases/download/devkitpro-pacman-1.0.1/devkitpro-pacman.deb \
-    && dpkg -i devkitpro-pacman.deb \
-    && rm devkitpro-pacman.deb
+# 2. Agregar la llave GPG y el repositorio de devkitPro
+RUN curl -sL https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x21703666068222A8 | gpg --dearmor > /usr/share/keyrings/devkitpro.gpg \
+    && echo "deb [signed-by=/usr/share/keyrings/devkitpro.gpg] https://apt.devkitpro.org stable main" > /etc/apt/sources.list.d/devkitpro.list
 
-# 3. CRÍTICO: Inicializar pacman y actualizar bases de datos
-# Sin esto, dkp-pacman no sabe dónde buscar los paquetes de Wii U
-RUN /opt/devkitpro/pacman/bin/pacman-key --init \
-    && /opt/devkitpro/pacman/bin/pacman-key --populate devkitpro \
-    && /opt/devkitpro/pacman/bin/pacman -Sy
-
-# 4. Instalar las herramientas
-RUN /opt/devkitpro/pacman/bin/pacman -S --noconfirm \
+# 3. Instalar dkp-pacman y herramientas
+RUN apt-get update && apt-get install -y \
+    dkp-pacman \
     wiiu-dev \
     wut
 
-# 5. Exportar variables de entorno para que el compilador las encuentre siempre
+# 4. Configurar variables de entorno
 ENV DEVKITPRO=/opt/devkitpro
 ENV DEVKITPPC=/opt/devkitpro/devkitPPC
 ENV PATH=$PATH:/opt/devkitpro/devkitPPC/bin
