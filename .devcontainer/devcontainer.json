@@ -1,6 +1,7 @@
 {
     "name": "WiiU Prebuilt Devkit",
     "image": "docker.io/webhdx/devkitppc:latest",
+    "postCreateCommand": "bash scripts/get-wut.sh",
     "customizations": {
         "vscode": {
             "settings": {
